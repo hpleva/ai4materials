@@ -438,10 +438,10 @@ def load_dataset_from_file(path_to_x, path_to_y, path_to_summary=None):
     dataset_info = None
 
     with open(path_to_x, 'rb') as input_x:
-        x = pickle.load(input_x)
+        x = pickle.load(input_x, encoding='latin1')
 
     with open(path_to_y, 'rb') as input_y:
-        y = pickle.load(input_y)
+        y = pickle.load(input_y, encoding='latin1')
 
     if path_to_summary is not None:
         with open(path_to_summary, 'rb') as summary_dataset:

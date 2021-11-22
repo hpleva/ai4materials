@@ -41,12 +41,26 @@ import os
 import logging
 import pandas as pd
 import numpy as np
-import urllib
+import urllib.request
+import progressbar
 
 K.set_image_dim_ordering('th')
 
 logger = logging.getLogger('ai4materials')
 
+pbar = None
+def show_progress(block_num, block_size, total_size):
+    global pbar
+    if pbar is None:
+        pbar = progressbar.ProgressBar(maxval=total_size)
+        pbar.start()
+
+    downloaded = block_num * block_size
+    if downloaded < total_size:
+        pbar.update(downloaded)
+    else:
+        pbar.finish()
+        pbar = None
 
 def train_neural_network(x_train, y_train, x_val, y_val, configs, partial_model_architecture, batch_size=32, nb_epoch=5,
                          normalize=True, checkpoint_dir=None, neural_network_name='my_neural_network',
@@ -301,6 +315,13 @@ def load_nature_comm_ziletti2018_network():
 def load_datasets(dataset_folder):
     """Download the pristine dataset and the dataset with 25% vacancies from Dataverse."""
 
+    # Dataverse might return an HTTP error 403, which means we have to play with the
+    # user-agent.
+    opener = urllib.request.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    urllib.request.install_opener(opener)
+
+
     train_set_name = 'pristine_dataset'
     # the IDs to retrieve the data can be found at this page:
     # https://dataverse.harvard.edu/api/datasets/export?exporter=dataverse_json&persistentId=doi%3A10.7910/DVN/ZDKBRF
@@ -313,9 +334,9 @@ def load_datasets(dataset_folder):
 
     logger.info("Downloading dataset of pristine structures from the Harvard Dataverse in {}.".format(dataset_folder))
     logger.info("Size: ~500MB. This may take a few minutes.")
-    urllib.urlretrieve(url_x_pristine, path_to_x_pristine)
-    urllib.urlretrieve(url_y_pristine, path_to_y_pristine)
-    urllib.urlretrieve(url_dataset_info_pristine, path_to_summary_pristine)
+    urllib.request.urlretrieve(url_x_pristine, path_to_x_pristine, show_progress)
+    urllib.request.urlretrieve(url_y_pristine, path_to_y_pristine, show_progress)
+    urllib.request.urlretrieve(url_dataset_info_pristine, path_to_summary_pristine, show_progress)
 
     test_set_name = 'vac25_dataset'
     # the IDs to retrieve the data can be found at this page:
@@ -331,9 +352,9 @@ def load_datasets(dataset_folder):
     logger.info("Downloading dataset of structures with 25% vacancies from the Harvard Dataverse in {}."
                 .format(dataset_folder))
     logger.info("Size: ~500MB. This may take a few minutes.")
-    urllib.urlretrieve(url_dataset_info_vac25, path_to_summary_vac25)
-    urllib.urlretrieve(url_x_vac25, path_to_x_vac25)
-    urllib.urlretrieve(url_y_vac25, path_to_y_vac25)
+    urllib.request.urlretrieve(url_dataset_info_vac25, path_to_summary_vac25, show_progress)
+    urllib.request.urlretrieve(url_x_vac25, path_to_x_vac25, show_progress)
+    urllib.request.urlretrieve(url_y_vac25, path_to_y_vac25, show_progress)
     logger.info("Download completed.")
 
     # load datasets
