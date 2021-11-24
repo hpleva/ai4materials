@@ -677,7 +677,7 @@ def standardize_cell(atoms, cell_type):
     return atoms
 
 
-def create_supercell(atoms, create_replicas_by='nb_atoms', min_nb_atoms=None, target_nb_atoms=None,
+def create_supercell(atoms, create_replicas_by='nb_atoms', min_nb_atoms=1, target_nb_atoms=None,
                      max_diff_nb_atoms=100, random_rotation_before=False, random_rotation=False,
                      cell_type=None,
                      optimal_supercell=False, radius=None, target_replicas=None):
