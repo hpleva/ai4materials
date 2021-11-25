@@ -261,10 +261,10 @@ def predict(x, y, configs, numerical_labels, text_labels, nb_classes=7, results_
     df_cols.append('class_labels')
 
     # make a dataframe with the results and write it to file
-    df_results = pd.DataFrame(np.column_stack((target_pred_class, prob_predictions, numerical_labels, text_labels)),
-                              columns=df_cols)
-    df_results.to_csv(results_file, index=False)
-    logger.info("Predictions written to: {}".format(results_file))
+    # df_results = pd.DataFrame(np.column_stack((target_pred_class, prob_predictions, numerical_labels, text_labels)),
+    #                           columns=df_cols)
+    # df_results.to_csv(results_file, index=False)
+    # logger.info("Predictions written to: {}".format(results_file))
 
     text_labels = text_labels.tolist()
     unique_class_labels = sorted(list(set(text_labels)))
@@ -274,8 +274,7 @@ def predict(x, y, configs, numerical_labels, text_labels, nb_classes=7, results_
     logger.info("Confusion matrix written to {}.".format(conf_matrix_file))
 
     # transform it in a list of n strings to be used by the viewer
-    string_probs = [str(['p' + str(i) + ':{0:.4f} '.format(item[i]) for i in range(nb_classes)]) for item in
-                    prob_predictions]
+    string_probs = [str(['p' + str(i) + ':{0:.4f} '.format(item[i]) for i in range(nb_classes)]) for item in prob_predictions]
 
     # insert new line if string too long
     # for item in target_pred_probs:

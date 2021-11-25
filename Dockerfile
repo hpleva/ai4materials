@@ -27,7 +27,7 @@ RUN cd $HOME
     # - export HDF5_DIR=${HOME}/hdf5-1.8.19-linux-centos7-x86_64-gcc485-shared/
     # - if [ ! -d "${HDF5_DIR}/include" ]; then wget https://support.hdfgroup.org/ftp/HDF5/current18/bin/linux-centos7-x86_64-gcc485/hdf5-1.8.19-linux-centos7-x86_64-gcc485-shared.tar.gz && tar xvzf hdf5-1.8.19-linux-centos7-x86_64-gcc485-shared.tar.gz; else echo 'Using hdf5 from cached directory'; fi
 ENV HDF5_DIR=${HOME}/hdf5-1.8.20-linux-centos7-x86_64-gcc485-shared/
-RUN if [ ! -d "${HDF5_DIR}/include" ]; then wget https://support.hdfgroup.org/ftp/HDF5/current18/bin/hdf5-1.8.20-linux-centos7-x86_64-gcc485-shared.tar.gz && tar xvzf hdf5-1.8.20-linux-centos7-x86_64-gcc485-shared.tar.gz; else echo 'Using hdf5 from cached directory'; fi
+RUN if [ ! -d "${HDF5_DIR}/include" ]; then wget https://support.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-1.8/hdf5-1.8.20/bin/hdf5-1.8.20-linux-centos7-x86_64-gcc485-shared.tar.gz && tar xvzf hdf5-1.8.20-linux-centos7-x86_64-gcc485-shared.tar.gz; else echo 'Using hdf5 from cached directory'; fi
 
     #  - export LD_LIBRARY_PATH=${HOME}/hdf5-1.10.0-patch1-linux-centos7-x86_64-gcc485-shared/lib:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH=${HDF5_DIR}/lib:${LD_LIBRARY_PATH}
@@ -46,7 +46,6 @@ RUN pip install configparser
     # install h5py (we want an h5py that is built with the new hdf5 version, that is why)
     #  - export HDF5_DIR=${HOME}/hdf5-1.10.0-patch1-linux-centos7-x86_64-gcc485-shared/
     #  - export HDF5_DIR=${HOME}/hdf5-1.8.19-linux-centos7-x86_64-gcc485-shared/
-ENV HDF5_DIR=${HOME}/hdf5-1.8.20-linux-centos7-x86_64-gcc485-shared/
 RUN pip install h5py
 
     # testing imports
@@ -59,7 +58,14 @@ RUN cd $HOME \
 && git clone https://github.com/FXIhub/libspimage \
 && mkdir -p libspimage/build && cd libspimage/build \
 && git pull \
-&& cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DUSE_CUDA=OFF -DPYTHON_WRAPPERS=ON -DHDF5_INCLUDE_DIR=${HDF5_DIR}/include -DHDF5_LIBRARY=${HDF5_DIR}/lib/libhdf5.so -DCMAKE_INSTALL_PREFIX=${HOME}/virtualenv/python${TRAVIS_PYTHON_VERSION} -DPYTHON_INSTDIR=${PY_SITE} .. \
+&& cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
+         -DUSE_CUDA=OFF \
+	 -DPYTHON_WRAPPERS=ON \
+	 -DHDF5_INCLUDE_DIRS=${HDF5_DIR}/include \
+	 #-DHDF5_LIBRARY=${HDF5_DIR}/lib/libhdf5.so \
+	 -DHDF5_LIBRARIES=${HDF5_DIR}/lib/libhdf5.so \
+	 -DCMAKE_INSTALL_PREFIX=${HOME}/virtualenv/python${TRAVIS_PYTHON_VERSION} \
+	 -DPYTHON_INSTDIR=${PY_SITE} .. \
 && make \
     #; -j 2 VERBOSE=1
 && make install
