@@ -43,7 +43,7 @@ from sklearn.metrics import accuracy_score
 from collections import defaultdict
 
 logger = logging.getLogger('ai4materials')
-
+logger.setLevel(logging.INFO)
 
 def train_neural_network(x_train, y_train, x_val, y_val, configs, partial_model_architecture, batch_size=32, nb_epoch=5,
                          normalize=True, checkpoint_dir=None, neural_network_name='my_neural_network',

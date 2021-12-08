@@ -326,7 +326,7 @@ class Diffraction2D(Descriptor):
         if write_intensity_npy:
             intensity_filename_npy = os.path.abspath(os.path.normpath(os.path.join(desc_folder,
                                                                                    structure.info['label'] +
-                                                                                   self.desc_metadata.ix[
+                                                                                   self.desc_metadata.loc[
                                                                                        'diffraction_2d_intensity'][
                                                                                        'file_ending'])))
             np.save(intensity_filename_npy, intensity_rgb)
@@ -336,7 +336,7 @@ class Diffraction2D(Descriptor):
         if write_intensity_png:
             intensity_filename_png = os.path.abspath(os.path.normpath(os.path.join(desc_folder,
                                                                                    structure.info['label'] +
-                                                                                   self.desc_metadata.ix[
+                                                                                   self.desc_metadata.loc[
                                                                                        'diffraction_2d_intensity_image'][
                                                                                        'file_ending'])))
             rgb_array = np.zeros((intensity_rgb.shape[0], intensity_rgb.shape[1], intensity_rgb.shape[2]), 'uint8')
@@ -355,7 +355,7 @@ class Diffraction2D(Descriptor):
             real_space = structure.info['descriptor']['diffraction_2d_real_space']
             real_space_filename_png = os.path.abspath(os.path.normpath(os.path.join(desc_folder,
                                                                                     structure.info['label'] +
-                                                                                    self.desc_metadata.ix['real_space'][
+                                                                                    self.desc_metadata.loc['real_space'][
                                                                                         'file_ending'])))
             img = Image.fromarray(real_space)
             img.save(real_space_filename_png)
@@ -365,7 +365,7 @@ class Diffraction2D(Descriptor):
         if write_phase_png:
             phase = structure.info['descriptor']['diffraction_2d_phase']
             phase_filename_png = os.path.abspath(os.path.normpath(os.path.join(desc_folder, structure.info['label'] +
-                                                                               self.desc_metadata.ix[
+                                                                               self.desc_metadata.loc[
                                                                                    'diffraction_2d_phase'][
                                                                                    'file_ending'])))
             img = Image.fromarray(phase)
@@ -380,11 +380,11 @@ class Diffraction2D(Descriptor):
                 # only for Beaker Notebook
                 coord_filename_in = os.path.abspath(os.path.normpath(os.path.join('/user/tmp/',
                                                                                   structure.info['label'] +
-                                                                                  self.desc_metadata.ix['coordinates'][
+                                                                                  self.desc_metadata.loc['coordinates'][
                                                                                       'file_ending'])))
             else:
                 coord_filename_in = os.path.abspath(os.path.normpath(os.path.join(desc_folder, structure.info['label'] +
-                                                                                  self.desc_metadata.ix[
+                                                                                  self.desc_metadata.loc[
                                                                                       'diffraction_2d_coordinates'][
                                                                                       'file_ending'])))
 

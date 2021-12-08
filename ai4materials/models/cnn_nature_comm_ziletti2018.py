@@ -369,7 +369,7 @@ def load_datasets(dataset_folder):
 def reshape_images_to_theano(images):
     # works only for Keras 1.
 
-    if keras.backend.image_dim_ordering() == 'th':
+    if 1: #keras.backend.image_dim_ordering() == 'th':
         if len(images.shape) == 4:
             # add channels
             images = np.reshape(images, (images.shape[0], -1, images.shape[1], images.shape[2]))

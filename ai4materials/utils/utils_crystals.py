@@ -59,7 +59,7 @@ from pint import UnitRegistry
 import time
 
 logger = logging.getLogger('ai4materials')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 def get_spacegroup_analyzer(atoms, symprec=None, angle_tolerance=-1.):
     """Given an ASE structure and a symprec, return the SpacegroupAnalyzer.\n
