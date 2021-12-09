@@ -172,7 +172,7 @@ def dispatch_jobs(function_to_calc, data, nb_jobs, desc_folder, desc_file):
 
     for idx_slice, slice_ in enumerate(slices):
         desc_file_i = desc_file + '_' + str(idx_slice) + '.tar.gz'
-        multiprocessing.log_to_stderr(logging.DEBUG)
+        # multiprocessing.log_to_stderr(logging.DEBUG)
         job = multiprocessing.Process(target=function_to_calc, args=(slice_, desc_file_i, idx_slice))
         jobs.append(job)
 

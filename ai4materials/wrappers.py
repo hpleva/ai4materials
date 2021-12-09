@@ -50,7 +50,7 @@ from functools import partial
 import logging
 
 logger = logging.getLogger('ai4materials')
-
+logger.setLevel(logging.CRITICAL)
 
 def calc_descriptor_in_memory(descriptor, configs, desc_file, ase_atoms_list, tmp_folder=None, desc_folder=None,
                         desc_info_file=None, target_list=None, operations_on_structure=None, nb_jobs=-1, **kwargs):
@@ -177,7 +177,6 @@ def calc_descriptor_in_memory(descriptor, configs, desc_file, ase_atoms_list, tm
         raise ValueError("Please provided a valid descriptor. Valid descriptors are {}".format(allowed_descriptors))
 
     logger.info("Calculation done.")
-
     logger.info('Writing descriptor information to file.')
 
     for idx_atoms, ase_atoms in enumerate(ase_atoms_results):
@@ -511,7 +510,8 @@ def worker_apply_operations(arg):
 
 
 def calc_descriptor(descriptor, configs, desc_file, ase_atoms_list, tmp_folder=None, desc_folder=None,
-                    desc_info_file=None, target_list=None, operations_on_structure=None, nb_jobs=-1, **kwargs):
+                    desc_info_file=None, target_list=None, operations_on_structure=None, nb_jobs=-1,
+                    extrinsic_scale_factors=None, **kwargs):
     """ Calculates the descriptor for a list of atomic structures.
 
     Starting from a list of ASE structures, calculates for each file the descriptor

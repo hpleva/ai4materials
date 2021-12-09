@@ -59,7 +59,7 @@ from pint import UnitRegistry
 import time
 
 logger = logging.getLogger('ai4materials')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 def get_spacegroup_analyzer(atoms, symprec=None, angle_tolerance=-1.):
     """Given an ASE structure and a symprec, return the SpacegroupAnalyzer.\n
@@ -1082,10 +1082,11 @@ def random_displace_atoms(atoms, noise_distribution, displacement=None, displace
                                                central_atom_species=central_atom_species,
                                                neighbor_atoms_species=neighbor_atoms_species,
                                                constrain_nn_distances=constrain_nn_distances)
+                print("random_displace_atoms: scale_factor = ", scale_factor)
                 if scale_factor is not None:
                     if min_scale_factor < scale_factor < max_scale_factor:
                         logger.debug("Cut off of {0} was successful".format(cutoff))
-                        logger.info("Scale factor: {}".format(scale_factor))
+                        # logger.info("Scale factor: {}".format(scale_factor))
                         logger.debug(
                             "Scale factor with extrinsic scaling: {} Angstrom".format(
                                 scale_factor * displacement_scaled))
@@ -1582,7 +1583,7 @@ def scale_structure(atoms, scaling_type, atoms_scaling_cutoffs, min_scale_factor
             if scale_factor is not None:
                 if min_scale_factor < scale_factor < max_scale_factor:
                     logger.debug("Cut off of {0} was successful".format(cutoff))
-                    logger.info("Scale factor: {}".format(scale_factor))
+                    # logger.info("Scale factor: {}".format(scale_factor))
                     logger.debug(
                         "Scale factor with extrinsic scaling: {} Angstrom".format(
                             scale_factor * extrinsic_scale_factor))
@@ -1607,11 +1608,16 @@ def scale_structure(atoms, scaling_type, atoms_scaling_cutoffs, min_scale_factor
     # and the spacegroup_number_actual will be wrong
     atoms_tmp = copy.deepcopy(atoms)
     scale_factor = scale_factor * extrinsic_scale_factor
-    atoms_tmp.set_positions(atoms_tmp.get_positions() * (1. / scale_factor))
 
     # also scale cell -> gives different results when haveing pbc=False (pbc=True not checked yet)
-    scaled_cell = atoms_tmp.get_cell() * (1. / scale_factor)
-    atoms_tmp.set_cell(scaled_cell)
+    if all(atoms.pbc):
+        scaled_cell = atoms_tmp.get_cell() * (1. / scale_factor)
+        atoms_tmp.set_cell(scaled_cell, scale_atoms=True)
+        
+    else:
+        atoms_tmp.set_positions(atoms_tmp.get_positions() * (1. / scale_factor))
+        scaled_cell = atoms_tmp.get_cell() * (1. / scale_factor)
+        atoms_tmp.set_cell(scaled_cell)
 
     if return_scale_factor:
         return atoms_tmp, scale_factor

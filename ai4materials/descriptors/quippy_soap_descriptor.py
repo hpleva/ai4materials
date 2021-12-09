@@ -129,7 +129,7 @@ class quippy_SOAP_descriptor(Descriptor):
         
         structure.set_pbc(self.p_b_c)
         #print(self.p_b_c)
-        logger.info("Structure: "+str(structure))
+        # logger.info("Structure: "+str(structure))
         # Important for  avoiding crash of polycrystal code
         # Uncommented part: look at TOTAL number of atoms. Now do it element-specific (i.e. each species needs to be there min_atoms # times, otherwise this species will not be considered and treated as vacancy)
         """
