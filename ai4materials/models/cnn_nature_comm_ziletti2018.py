@@ -23,7 +23,8 @@ __email__ = "ziletti@fhi-berlin.mpg.de"
 __date__ = "23/09/18"
 
 import os
-os.environ["KERAS_BACKEND"] = "theano"
+# os.environ["KERAS_BACKEND"] = "theano"
+os.environ["KERAS_BACKEND"] = "tensorflow"
 import keras
 import keras.backend as K
 from keras.callbacks import CSVLogger
